@@ -3,24 +3,22 @@ export function calcTax(invoices) {
 
   try {
     invoices.forEach((invoice) => {
-
-      if(invoice.ufEmitente == "MG"){
-        throw new Error("Nota de dentro do estado")
+      if (invoice.ufEmitente === "MG") {
+        throw new Error("Nota de dentro do estado de MG");
+      }
+      if (!invoice.itens || invoice.itens.length === 0) {
+        throw new Error("A nota não contém produtos");
       }
 
       let total_tax = 0; // Valor do Imposto Calculado
       let tax_substitution = 0; // Valor total da substituição
       const tax_calcs = {}; // Valor total das notas e o imposto individual
+      let total_tributation_4 = 0; // Valor total do imposto calculado sobre 17.07%
+      let total_tributation_12_0 = 0; // Valor total do imposto calculado sobre 7.32%
 
       invoice.itens.forEach((item) => {
-
-        if(!item){
-          throw new Error("Invoice does'nt have products")
-        }
-
         const keyNcmCfop = `NCM:${item.ncm}, CFOP:${item.cfop}`;
 
-        // Verificar se o CFOP começa com "61"
         if (!tax_calcs[keyNcmCfop]) {
           tax_calcs[keyNcmCfop] = {
             total: 0,
@@ -38,6 +36,13 @@ export function calcTax(invoices) {
           throw new Error("Aliquota Not Defined");
         }
 
+        if (aliquota == 17.07 && item.cfop.startsWith("61")) {
+          total_tributation_4 += item.value
+        }
+        if (aliquota == 7.32 && item.cfop.startsWith("61")) {
+          total_tributation_12_0 += item.value
+        }
+
         // Calcula o imposto individual para o item
         const item_tax = (item.value * aliquota) / 100;
 
@@ -45,7 +50,7 @@ export function calcTax(invoices) {
         tax_calcs[keyNcmCfop].calculed_tax += item_tax;
 
         // Adicione o valor do imposto individual ao total_tax
-        if (item.cfop.startsWith('61')) {
+        if (item.cfop.startsWith("61")) {
           total_tax += item_tax;
         } else {
           tax_substitution += item.value;
@@ -56,11 +61,13 @@ export function calcTax(invoices) {
         header: {
           invoiceNumber: invoice.number,
           cnpjEmitente: invoice.cnpjEmitente,
-          nameEmit: invoice.nameEmitente
+          nameEmit: invoice.nameEmitente,
         },
         tax_calcs,
         total_tax,
         tax_substitution,
+        total_tributation_12_0,
+        total_tributation_4
       };
 
       results.push(ObjectReturn);
@@ -68,6 +75,7 @@ export function calcTax(invoices) {
 
     return results;
   } catch (error) {
+    console.error("Erro ao calcular os impostos:", error.message);
     throw new Error(error);
-  }
+  }
 }

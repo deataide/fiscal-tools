@@ -1,11 +1,14 @@
 import React from "react";
-import XmlHandler from './components/Importer'
+import XmlHandler from "./components/XmlHandler";
+import Modal from "react-modal";
+
 function App() {
+  Modal.setAppElement("#root");
 
   return (
     <div className="flex flex-col h-screen">
       {/* Cabeçalho */}
-      <div className="bg-lime-700 text-white py-4 text-center">
+      <div className="text-white py-4 text-center bg-gradient-to-r from-blue-500 to-green-500 w-full h-64 shadow-md">
         <h1 className="text-2xl font-bold">Fiscal Tools</h1>
       </div>
 
@@ -15,13 +18,8 @@ function App() {
           <XmlHandler />
         </div>
       </div>
-
-      {/* Rodapé */}
-      <div className="bg-lime-700 text-white py-4 text-center">
-        <p></p>
-      </div>
     </div>
   );
 }
 
-export default App
+export default App;
