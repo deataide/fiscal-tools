@@ -1,24 +1,28 @@
 import React from "react";
-import XmlHandler from "./components/XmlHandler";
 import Modal from "react-modal";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Home from "./pages/Home";
+import Antecipacao from "./pages/Antecipacao";
+import Calculos from "./pages/Calculos";
 
 function App() {
   Modal.setAppElement("#root");
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* Cabeçalho */}
-      <div className="text-white py-4 text-center bg-gradient-to-r from-blue-500 to-green-500 w-full h-64 shadow-md">
-        <h1 className="text-2xl font-bold">Fiscal Tools</h1>
-      </div>
 
-      {/* Conteúdo principal */}
-      <div className="flex-grow bg-gray-100">
-        <div className="container mx-auto py-8">
-          <XmlHandler />
-        </div>
-      </div>
-    </div>
+     <BrowserRouter>
+     <Routes>
+      <Route path="fiscal-tools" element={<Home/>}/>
+      <Route path="fiscal-tools/antecipacao" element={<Antecipacao/>}/>
+      <Route path="fiscal-tools/calculos" element={<Calculos/>}/>
+     </Routes>
+
+  </BrowserRouter>
+
   );
 }
 

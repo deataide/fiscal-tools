@@ -117,9 +117,13 @@ const XmlHandler = () => {
 
   const filterHandle = () => {
     try {
+      if (invoices == null) {
+        toast.error("Importe XML's");
+      }
+
       const calc = calcTax(invoices);
       setTratedInvoices(calc);
-      console.log(calc);
+
       return;
     } catch (error) {
       toast.error(error);
@@ -137,7 +141,7 @@ const XmlHandler = () => {
       <div>
         <div className="mb-4 flex justify-center m-12 flex-col">
           <h1 className="flex justify-center text-blue-700 text-3xl font-bold">
-           Generate your Tax
+            Antecipação
           </h1>
           <div className="m-8 flex justify-center ">
             <input
@@ -152,25 +156,25 @@ const XmlHandler = () => {
               onClick={filterHandle}
               className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              Generate Docs
+              Gerar Dados
             </button>
             <button
               onClick={clearInvoices}
               className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
-              Clear Docs
+              Limpar Dados
             </button>
             <button
               onClick={handleDownloadPDF}
               className="ml-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
-              Download Docs
+              Download Doc
             </button>
             <button
               onClick={() => setIsFormVisible(!isFormVisible)}
               className="ml-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
             >
-              Set Client Data
+              Dados do Cliente
             </button>
             {isFormVisible && (
               <form
@@ -178,11 +182,11 @@ const XmlHandler = () => {
                 className="p-8 absolute bg-blue-300 border rounded px-3 py-2"
               >
                 <div className="pt-4 pb-4 text-white text-2xl font-bold">
-                  Client Data
+                  Preencha os Dados do Cliente
                 </div>
                 <div className="mb-4">
                   <input
-                    placeholder="Name"
+                    placeholder="Nome..."
                     type="text"
                     id="name"
                     {...register("name", { required: true })}
@@ -198,7 +202,7 @@ const XmlHandler = () => {
                 </div>
                 <div className="mb-4">
                   <input
-                    placeholder="Reference..."
+                    placeholder="Referencia..."
                     type="text"
                     id="reference"
                     {...register("reference", { required: true })}
@@ -215,7 +219,7 @@ const XmlHandler = () => {
                 <div className="mb-4">
                   <input
                     type="text"
-                    placeholder="State Registration"
+                    placeholder="Inscrição Estadual..."
                     id="stateRegistration"
                     {...register("stateRegistration", { required: true })}
                     className={`w-full border border-gray-300 rounded px-3 py-2 ${
@@ -232,7 +236,7 @@ const XmlHandler = () => {
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
-                  Send
+                  Confirmar
                 </button>
               </form>
             )}
@@ -244,7 +248,7 @@ const XmlHandler = () => {
             <div className="flex justify-between m-4">
               <div>
                 <p className="text-lg font-semibold">
-                  Client: {clientData.name}
+                  Cliente: {clientData.name}
                 </p>
                 <p className="text-lg font-semibold">
                   I.E.: {clientData.stateRegistration}
